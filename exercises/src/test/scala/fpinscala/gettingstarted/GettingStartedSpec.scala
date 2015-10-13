@@ -1,7 +1,7 @@
 package fpinscala.gettingstarted
 
 import org.scalatest.{FlatSpec, Matchers}
-import fpinscala.gettingstarted.PolymorphicFunctions.isSorted
+import fpinscala.gettingstarted.PolymorphicFunctions.{ isSorted, curry}
 import fpinscala.gettingstarted.MyModule.fib
 
 class GettingStartedSpec extends FlatSpec with Matchers {
@@ -32,16 +32,17 @@ class GettingStartedSpec extends FlatSpec with Matchers {
   "isSorted" should "return true when given an empty array" in {
     isSorted[Int](Array(), intCompare) should be(true)
   }
-
   it should "return true when given a 1 element array" in {
     isSorted[Int](Array(1), intCompare) should be(true)
   }
-
   it should "return true when given a sorted 2 element array" in {
     isSorted[Int](Array(1,2), intCompare) should be(true)
   }
-
   it should "return false when given a unsorted 2 element array" in {
     isSorted[Int](Array(2,1), intCompare) should be(false)
+  }
+
+  "curry" should "return a function that takes another argument that then calls the provided function" in {
+    curry[Int, Int, Int]((a,b)=>b)(1)(2) should be(2)
   }
 }
