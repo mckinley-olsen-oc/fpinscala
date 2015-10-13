@@ -1,7 +1,7 @@
 package fpinscala.gettingstarted
 
 import org.scalatest.{FlatSpec, Matchers}
-import fpinscala.gettingstarted.PolymorphicFunctions.{ isSorted, curry, uncurry}
+import fpinscala.gettingstarted.PolymorphicFunctions.{ isSorted, curry, uncurry, compose}
 import fpinscala.gettingstarted.MyModule.fib
 
 class GettingStartedSpec extends FlatSpec with Matchers {
@@ -48,5 +48,10 @@ class GettingStartedSpec extends FlatSpec with Matchers {
 
   "uncurry" should "return a function that takes two arguments and applies them to the provided function" in {
     uncurry[Int,Int,Int]((a)=>(b)=>a)(1,2) should be(1)
+  }
+
+  "compose" should "return a function that takes the return value of the second function and provides it " +
+    "to the first" in {
+    compose[Int,Int,Int]((b)=>b+2, (a)=>a+1)(1) should be(4)
   }
 }
