@@ -1,7 +1,7 @@
 package fpinscala.datastructures
 
 import org.scalatest.{FlatSpec, Matchers}
-import fpinscala.datastructures.List.{ tail, setHead, head}
+import fpinscala.datastructures.List.{ tail, setHead, head, drop}
 
 class ListSpec extends FlatSpec with Matchers {
 
@@ -19,5 +19,20 @@ class ListSpec extends FlatSpec with Matchers {
   "setHead" should "return a list with the head element being the passed value and the tail being the passed list" in {
     val testList = Cons(2, Nil)
     setHead(tail(testList), head(testList)) should be(testList)
+  }
+
+  "drop" should "return the list when dropping 0 elements" in {
+    drop(Nil, 0) should be(Nil)
+  }
+  it should "return the list when dropping a negative number of elements" in {
+    drop(Nil, -1) should be(Nil)
+  }
+  it should "return the tail of the list when dropping 1 element" in {
+    val testList = Cons(1, Cons(2, Nil))
+    drop(testList, 1) should be(Cons(2, Nil))
+  }
+  it should "return the tail of the tail of the tail of the list when dropping 3 elements" in {
+    val testList = Cons(1, Cons(2, Cons(3, Cons(4, Nil))))
+    drop(testList, 3) should be(Cons(4, Nil))
   }
 }

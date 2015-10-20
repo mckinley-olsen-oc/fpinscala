@@ -62,7 +62,7 @@ object List { // `List` companion object. Contains functions for creating and wo
 
   def setHead[A](l: List[A], h: A): List[A] = Cons(h, l)
 
-  def drop[A](l: List[A], n: Int): List[A] = sys.error("todo")
+  def drop[A](l: List[A], n: Int): List[A] = if(n > 0) drop(tail(l), n-1) else l
 
   def dropWhile[A](l: List[A], f: A => Boolean): List[A] = sys.error("todo")
 
