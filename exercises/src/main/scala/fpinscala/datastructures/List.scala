@@ -13,6 +13,11 @@ object List { // `List` companion object. Contains functions for creating and wo
     case Cons(x,xs) => x + sum(xs) // The sum of a list starting with `x` is `x` plus the sum of the rest of the list.
   }
 
+  def head[A](xs: List[A]) = xs match {
+    case Cons(x, xs) => x
+    case Nil => Nil
+  }
+
   def product(ds: List[Double]): Double = ds match {
     case Nil => 1.0
     case Cons(0.0, _) => 0.0
@@ -55,7 +60,7 @@ object List { // `List` companion object. Contains functions for creating and wo
     case Nil => Nil
   }
 
-  def setHead[A](l: List[A], h: A): List[A] = sys.error("todo")
+  def setHead[A](l: List[A], h: A): List[A] = Cons(h, l)
 
   def drop[A](l: List[A], n: Int): List[A] = sys.error("todo")
 

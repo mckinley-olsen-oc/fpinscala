@@ -1,7 +1,7 @@
 package fpinscala.datastructures
 
 import org.scalatest.{FlatSpec, Matchers}
-import fpinscala.datastructures.List.{tail}
+import fpinscala.datastructures.List.{ tail, setHead, head}
 
 class ListSpec extends FlatSpec with Matchers {
 
@@ -16,4 +16,8 @@ class ListSpec extends FlatSpec with Matchers {
     tail(Cons[Int](2, listTail)) should be (listTail)
   }
 
+  "setHead" should "return a list with the head element being the passed value and the tail being the passed list" in {
+    val testList = Cons(2, Nil)
+    setHead(tail(testList), head(testList)) should be(testList)
+  }
 }
