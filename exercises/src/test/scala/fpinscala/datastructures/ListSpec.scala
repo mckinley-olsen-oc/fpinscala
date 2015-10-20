@@ -1,7 +1,7 @@
 package fpinscala.datastructures
 
 import org.scalatest.{FlatSpec, Matchers}
-import fpinscala.datastructures.List.{ tail, setHead, head, drop}
+import fpinscala.datastructures.List.{ tail, setHead, head, drop, dropWhile, init}
 
 class ListSpec extends FlatSpec with Matchers {
 
@@ -35,4 +35,20 @@ class ListSpec extends FlatSpec with Matchers {
     val testList = Cons(1, Cons(2, Cons(3, Cons(4, Nil))))
     drop(testList, 3) should be(Cons(4, Nil))
   }
+
+  "dropWhile" should "return the list when the predicate is false" in {
+    val testList = Cons(1, Nil)
+    dropWhile(testList, (_:Int)=>false) should be(testList)
+  }
+  it should "return empty list when the predicate is true" in {
+    dropWhile(Cons(2, Cons(3, Nil)), (_:Int)=>true) should be(Nil)
+  }
+
+  "init" should "return the empty list when given an empty list" in {
+    init(Nil) should be(Nil)
+  }
+  it should "return the list with all but the last element" in {
+    init(Cons(2, Nil)) should be(Nil)
+  }
+
 }

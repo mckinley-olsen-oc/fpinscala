@@ -13,9 +13,9 @@ object List { // `List` companion object. Contains functions for creating and wo
     case Cons(x,xs) => x + sum(xs) // The sum of a list starting with `x` is `x` plus the sum of the rest of the list.
   }
 
-  def head[A](xs: List[A]) = xs match {
+  def head[A](xs: List[A]):A = xs match {
     case Cons(x, xs) => x
-    case Nil => Nil
+    case Nil => throw new IllegalArgumentException
   }
 
   def product(ds: List[Double]): Double = ds match {
@@ -64,9 +64,16 @@ object List { // `List` companion object. Contains functions for creating and wo
 
   def drop[A](l: List[A], n: Int): List[A] = if(n > 0) drop(tail(l), n-1) else l
 
-  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = sys.error("todo")
+  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = l match {
+    case Cons(x, xs) => if(f(x)) dropWhile(xs, f) else l
+    case _ => l
+  }
 
-  def init[A](l: List[A]): List[A] = sys.error("todo")
+  def init[A](l: List[A]): List[A] = l match {
+    case Cons(_, Nil) => Nil
+    case Cons(x, xs) => Cons(x, init(xs))
+    case Nil => Nil
+  }
 
   def length[A](l: List[A]): Int = sys.error("todo")
 
