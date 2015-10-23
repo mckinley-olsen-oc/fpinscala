@@ -1,7 +1,7 @@
 package fpinscala.datastructures
 
 import org.scalatest.{FlatSpec, Matchers}
-import fpinscala.datastructures.List.{ tail, setHead, head, drop, dropWhile, init}
+import fpinscala.datastructures.List.{ tail, setHead, head, drop, dropWhile, init, length}
 
 class ListSpec extends FlatSpec with Matchers {
 
@@ -49,6 +49,13 @@ class ListSpec extends FlatSpec with Matchers {
   }
   it should "return the list with all but the last element" in {
     init(Cons(2, Nil)) should be(Nil)
+  }
+
+  "length" should "return 0 when passed an empty list" in {
+    List.length(Nil) should be(0)
+  }
+  it should "return 1 when passed a single element list" in {
+    List.length(Cons(1, Nil)) should be(1)
   }
 
 }
