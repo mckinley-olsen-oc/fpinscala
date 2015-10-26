@@ -2,7 +2,7 @@ package fpinscala.errorhandling
 
 import org.scalatest.{FlatSpec, Matchers}
 import fpinscala.errorhandling.{Option, Some, None}
-import fpinscala.errorhandling.Option.{ variance, map2 }
+import fpinscala.errorhandling.Option.{ variance, map2, sequence, traverse }
 
 class OptionSpec extends FlatSpec with Matchers {
 
@@ -56,4 +56,17 @@ class OptionSpec extends FlatSpec with Matchers {
     map2(Some(3), Some(2))((a,b)=>a+b).shouldBe(Some(5))
   }
 
+  "sequence" should s"result in ${None} when the list contains ${None}" in {
+    sequence(List(Some(1), None, Some(2))).shouldBe(None)
+  }
+  it should s"result in a list of the option values when the list does not contain ${None}" in {
+    sequence(List(Some(1), Some(2))).shouldBe(Some(List(1,2)))
+  }
+
+  "traverse" should s"result in ${None} when the mapping function returns ${None}" in {
+    traverse(List(1,2))((_)=>None).shouldBe(None)
+  }
+  it should s"result in a list with the mapping function applied when the mapping function does not return ${None}" in {
+    traverse(List(1,2))((a)=>Some(a*2)).shouldBe(Some(List(2,4)))
+  }
 }
