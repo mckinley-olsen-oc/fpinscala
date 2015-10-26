@@ -2,6 +2,7 @@ package fpinscala.errorhandling
 
 import org.scalatest.{FlatSpec, Matchers}
 import fpinscala.errorhandling.{Option, Some, None}
+import fpinscala.errorhandling.Option.variance
 
 class OptionSpec extends FlatSpec with Matchers {
 
@@ -37,6 +38,13 @@ class OptionSpec extends FlatSpec with Matchers {
   }
   it should "return the value constructed with Some when the predicate is true" in {
     Some(1).filter((_)=>true).shouldBe(Some(1))
+  }
+
+  "variance" should s"return ${None} when given an empty seq" in {
+    variance(Seq()).shouldBe(None)
+  }
+  it should "return the correct result" in {
+    variance(Seq(600, 470, 170, 430, 300)).shouldBe(Some(21704))
   }
 
 }
