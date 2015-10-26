@@ -2,7 +2,7 @@ package fpinscala.errorhandling
 
 import org.scalatest.{FlatSpec, Matchers}
 import fpinscala.errorhandling.{Option, Some, None}
-import fpinscala.errorhandling.Option.variance
+import fpinscala.errorhandling.Option.{ variance, map2 }
 
 class OptionSpec extends FlatSpec with Matchers {
 
@@ -45,6 +45,15 @@ class OptionSpec extends FlatSpec with Matchers {
   }
   it should "return the correct result" in {
     variance(Seq(600, 470, 170, 430, 300)).shouldBe(Some(21704))
+  }
+
+  "map2" should s"return ${None} if either option is ${None}" in {
+    val someFunc = (a:Int,b:Int) => a
+    map2(None, Some(1))(someFunc).shouldBe(None)
+    map2(Some(1), None)(someFunc).shouldBe(None)
+  }
+  it should s"return the result of applying f to both option values when both options are some" in {
+    map2(Some(3), Some(2))((a,b)=>a+b).shouldBe(Some(5))
   }
 
 }
