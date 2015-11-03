@@ -22,7 +22,7 @@ class StreamSpec extends FlatSpec with Matchers {
   }
 
   "take" should s"return ${Empty} when taking 0" in {
-    Empty.take(0).shouldBe(Empty)
+    exampleStream.take(0).shouldBe(Empty)
   }
   it should "return the entire stream when taking more than the stream's length" in {
     exampleStream.take(exampleStream.toList().length+1).toList().shouldBe(exampleList)
@@ -30,5 +30,15 @@ class StreamSpec extends FlatSpec with Matchers {
   val howManyToTake=2
   it should s"return a stream with only the first ${howManyToTake} thunks" in {
     exampleStream.take(howManyToTake).toList().shouldBe(exampleList.take(howManyToTake))
+  }
+
+  "takeWhile" should s"return ${Empty} when given a constantly falst predicate" in {
+    exampleStream.takeWhile((_)=>false).shouldBe(Empty)
+  }
+  val howManyToTakeWhile = 2
+  it should s"return the first ${howManyToTakeWhile}" in {
+    exampleStream.takeWhile((el)=> el != exampleList.drop(howManyToTakeWhile).head)
+      .toList()
+      .shouldBe(exampleList.take(howManyToTakeWhile))
   }
 }
