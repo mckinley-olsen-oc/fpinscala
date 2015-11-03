@@ -34,13 +34,28 @@ trait Stream[+A] {
 
   def drop(n: Int): Stream[A] = sys.error("todo")
 
+  /*
   def takeWhile(p: A => Boolean): Stream[A] = 
     this match {
       case Cons(xT, xsT) if(p(xT())) => Cons(xT, ()=>xsT().takeWhile(p))
       case _ => Empty
     }
+   */
 
-  def forAll(p: A => Boolean): Boolean = sys.error("todo")
+  def takeWhile(p: A => Boolean): Stream[A] = {
+    foldRight(Empty:Stream[A])(
+      (x, xsT)=>
+        if(p(x))
+          Cons(()=>x, ()=>xsT)
+        else
+          Empty
+    )
+  }
+
+  def forAll(p: A => Boolean): Boolean = this match {
+    case Cons(xT, xsT) => p(xT()) && xsT().forAll(p)
+    case Empty => true
+  }
 
   def headOption: Option[A] = sys.error("todo")
 

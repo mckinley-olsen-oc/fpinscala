@@ -32,7 +32,7 @@ class StreamSpec extends FlatSpec with Matchers {
     exampleStream.take(howManyToTake).toList().shouldBe(exampleList.take(howManyToTake))
   }
 
-  "takeWhile" should s"return ${Empty} when given a constantly falst predicate" in {
+  "takeWhile" should s"return ${Empty} when given a constantly false predicate" in {
     exampleStream.takeWhile((_)=>false).shouldBe(Empty)
   }
   val howManyToTakeWhile = 2
@@ -40,5 +40,15 @@ class StreamSpec extends FlatSpec with Matchers {
     exampleStream.takeWhile((el)=> el != exampleList.drop(howManyToTakeWhile).head)
       .toList()
       .shouldBe(exampleList.take(howManyToTakeWhile))
+  }
+
+  "forAll" should "terminate at the first false" in {
+    var earlyTerminated = true
+    exampleStream.forAll((ele)=>if(ele>=secondElement){earlyTerminated=false;false}else false)
+      .shouldBe(false)
+    assert(earlyTerminated)
+  }
+  it should s"return true for an ${Empty} stream" in {
+    Empty.forAll((_)=>false).shouldBe(true)
   }
 }
