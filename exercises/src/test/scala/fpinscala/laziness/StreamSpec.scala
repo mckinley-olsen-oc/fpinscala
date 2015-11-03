@@ -2,6 +2,7 @@ package fpinscala.laziness
 
 import org.scalatest.{FlatSpec, Matchers}
 import fpinscala.laziness.Stream.{ cons, empty }
+import fpinscala.laziness.Stream.{constant, from}
 
 
 class StreamSpec extends FlatSpec with Matchers {
@@ -70,5 +71,14 @@ class StreamSpec extends FlatSpec with Matchers {
   "append" should "append to the end of the stream" in {
     val ele=1
     exampleStream.append(exampleStream).toList().shouldBe(exampleList++ exampleList)
+  }
+
+  "constant" should "produce a stream with all the same element" in {
+    val ele = "a"
+    assert(constant(ele).take(10).forAll((a)=>a==ele))
+  }
+  "from" should "produce a stream starting from that increases by one" in {
+    val a = List.range(3, 13, 1)
+    from(3).take(10).toList().shouldBe(a)
   }
 }
