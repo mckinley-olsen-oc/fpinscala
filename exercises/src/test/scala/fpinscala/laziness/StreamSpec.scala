@@ -51,4 +51,24 @@ class StreamSpec extends FlatSpec with Matchers {
   it should s"return true for an ${Empty} stream" in {
     Empty.forAll((_)=>false).shouldBe(true)
   }
+
+  "headOption" should s"return ${None} when called on an empty stream" in {
+    Empty.headOption.shouldBe(None)
+  }
+  it should "return a Some containing the first element in the stream" in {
+    exampleStream.headOption.shouldBe(Some(firstElement))
+  }
+
+  "map" should "apply the function to the elements in the stream" in {
+    val mapper = (x:Int)=>x+1
+    exampleStream.map(mapper).toList().shouldBe(exampleList.map(mapper))
+  }
+  "filter" should "filter out odds in the stream" in {
+    val fil = (x:Int)=> x%2==0
+    exampleStream.filter(fil).toList().shouldBe(exampleList.filter(fil))
+  }
+  "append" should "append to the end of the stream" in {
+    val ele=1
+    exampleStream.append(exampleStream).toList().shouldBe(exampleList++ exampleList)
+  }
 }
