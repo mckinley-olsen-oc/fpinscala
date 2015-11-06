@@ -40,8 +40,7 @@ object RNG {
   }
 
   def double(rng: RNG): (Double, RNG) = {
-    val (nInt, nRng) = nonNegativeInt(rng)
-    (nInt.toDouble / Integer.MAX_VALUE, nRng)
+    map(nonNegativeInt)(_.toDouble / Integer.MAX_VALUE)(rng)
   }
 
   def intDouble(rng: RNG): ((Int,Double), RNG) = {
@@ -63,18 +62,24 @@ object RNG {
   }
 
   def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
-    def helper(cnt: Int, rng: RNG, lst: List[Int]):(List[Int], RNG) ={
-      if(count<=0)
-        (lst, rng)
-      val (nxt,r) = rng.nextInt
-      helper(cnt-1, r, lst:+nxt)
-    }
-    helper(count, rng, List())
+    sequence(List.fill(count)((_:RNG).nextInt))(rng)
   }
 
-  def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = ???
+  def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = 
+    rng => {
+      val (a, rng1) = ra(rng)
+      val (b, rng2) = rb(rng1)
+      (f(a,b), rng2)
+    }
 
-  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = ???
+  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] =
+    rng => {
+      def helper(f: Rand[A], t: (List[A],RNG)) = {
+        val (v, rn) = f(t._2)
+        (t._1:+v, rn)
+      }
+      fs.foldRight((List[A](), rng))(helper)
+    }
 
   def flatMap[A,B](f: Rand[A])(g: A => Rand[B]): Rand[B] = ???
 }
