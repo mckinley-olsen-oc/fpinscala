@@ -1,7 +1,7 @@
 package fpinscala.state
 
 import org.scalatest.{FlatSpec, Matchers}
-import fpinscala.state.RNG.{Simple, nonNegativeInt, double, ints, intDouble, randIntDouble, map, flatMap, mapFlatMap, map2, map2FlatMap}
+import fpinscala.state.RNG.{Simple, nonNegativeInt, double, ints, intDouble, randIntDouble, map, flatMap, mapFlatMap, map2, map2FlatMap, boolean }
 import fpinscala.state.State
 
 class StateSpec extends FlatSpec with Matchers {
@@ -17,6 +17,10 @@ class StateSpec extends FlatSpec with Matchers {
   "double" should "produce a value between 0 and 1" in {
     val dbl = double(Simple(67))._1
     assert(dbl < 1 && dbl > 0)
+  }
+
+  "boolean" should "produce a boolean value" in {
+    boolean(Simple(m.keySet.head)).shouldBe((false, Simple(mNext.get(m.keySet.head).get)))
   }
 
   "ints" should "return an empty list when given a count of 0" in {

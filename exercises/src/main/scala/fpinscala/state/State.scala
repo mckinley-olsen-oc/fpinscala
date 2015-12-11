@@ -33,6 +33,11 @@ object RNG {
     (nInt, nRng)
   }
 
+  def boolean(rng:RNG):(Boolean, RNG) ={
+    val (i, rng2) = rng.nextInt
+    (i%2==0, rng2)
+  }
+
   def double(rng: RNG): (Double, RNG) = {
     map(nonNegativeInt)(_.toDouble / Integer.MAX_VALUE)(rng)
   }
@@ -125,6 +130,16 @@ case class State[S,+A](run: S => (A, S)) {
     sys.error("todo")
   def flatMap[B](f: A => State[S, B]): State[S, B] = 
     sys.error("todo")
+
+  //copied
+  def sequence[S, A](sas: List[State[S, A]]): State[S, List[A]] = {
+    def go(s: S, actions: List[State[S,A]], acc: List[A]): (List[A],S) =
+      actions match {
+        case Nil => (acc.reverse,s)
+        case h :: t => h.run(s) match { case (a,s2) => go(s2, t, a :: acc) }
+      }
+    State((s: S) => go(s,sas,List()))
+  }
 }
 
 sealed trait Input
