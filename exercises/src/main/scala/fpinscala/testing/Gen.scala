@@ -14,6 +14,10 @@ shell, which you can fill in and modify while working through the chapter.
 */
 
 trait Prop {
+  def check: Boolean
+  def &&(p: Prop): Boolean = {
+    this.check && p.check
+  }
 }
 
 object Prop {
@@ -22,11 +26,42 @@ object Prop {
 
 object Gen {
   def unit[A](a: => A): Gen[A] = ???
+
+  def choose(start: Int, stopExclusive: Int): Gen[Int] = {
+    val r = (stopExclusive - start)
+    Gen(
+      State(
+          RNG.nonNegativeLessThan(r)
+      ).map(i=>i+start)
+    )
+  }
+
+  def Unit[A](a: => A):Gen[A] ={
+    Gen(
+      State(
+        RNG.unit(a)
+      )
+    )
+  }
+
+  def boolean: Gen[Boolean] ={
+    Gen(
+      State(
+        rng => RNG.boolean(rng)
+      )
+    )
+  }
 }
 
+/*
 trait Gen[A] {
   def map[A,B](f: A => B): Gen[B] = ???
   def flatMap[A,B](f: A => Gen[B]): Gen[B] = ???
+}
+ */
+
+case class Gen[A](sample: State[RNG, A]) {
+
 }
 
 trait SGen[+A] {

@@ -41,8 +41,30 @@ object Par {
 
   def sortPar(parList: Par[List[Int]]) = map(parList)(_.sorted)
 
+  // creates a primitive; bad practice
   def sequence[A](ps: List[Par[A]]): Par[List[A]] = {
     es => UnitFuture(ps.map(p => p(es).get))
+  }
+  //takes a List[(ExecutorService)=>Future[A]], produces a (ExecutorService)=>Future[List[A]]
+  //return a function that returns a Future List of A
+  def sequence2[A](ps: List[Par[A]]): Par[List[A]] = {
+    def helper(es: ExecutorService): Future[List[A]] = {
+      UnitFuture(ps.map((a: Par[A]) => a(es).get()))
+    }
+    map(
+      helper
+    )(
+      (a: List[A]) => a
+    )
+  }
+
+  def parMap[A,B](ps: List[A])(f: A=> B): Par[List[B]] = fork {
+    val fbs: List[Par[B]] = ps.map(asyncF(f))
+    sequence2(fbs)
+  }
+
+  def parFilter[A](as: List[A])(f: A => Boolean): Par[List[A]] = {
+    unit(as)
   }
 
   def equal[A](e: ExecutorService)(p: Par[A], p2: Par[A]): Boolean = 
